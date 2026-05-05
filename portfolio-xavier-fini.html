@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xavier Fini — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #1e1e1e;
+    --accent: #e8ff47;
+    --accent2: #ff4f4f;
+    --text: #e8e8e2;
+    --muted: #555;
+    --card: #141414;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(232,255,71,0.4);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s;
+  }
+  .cursor.hovered { width: 6px; height: 6px; }
+  .cursor-ring.hovered { width: 56px; height: 56px; border-color: var(--accent); }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    mix-blend-mode: normal;
+  }
+  nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(232,255,71,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,79,79,0.03) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 180px);
+    line-height: 0.88;
+    letter-spacing: -2px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.65s forwards;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-scroll {
+    position: absolute;
+    bottom: 48px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-line {
+    width: 60px;
+    height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--accent);
+    animation: lineScroll 1.8s 1.2s infinite;
+  }
+  .hero-number {
+    position: absolute;
+    right: 48px;
+    bottom: 48px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s 0.8s forwards;
+  }
+
+  /* Section base */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 80px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 16px;
+  }
+
+  /* About */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #aaa;
+    margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    transition: border-color 0.2s;
+  }
+  .stat-box:hover { border-color: var(--accent); }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Projects */
+  #projets { background: var(--surface); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2px;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+    cursor: none;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,255,71,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover::before { opacity: 1; }
+  .project-card:hover { border-color: rgba(232,255,71,0.3); }
+  .project-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .project-num {
+    position: absolute;
+    top: 36px;
+    right: 36px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .project-card:hover .project-num { color: rgba(232,255,71,0.15); }
+  .project-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .project-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    color: var(--muted);
+  }
+  .project-visual {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .project-visual svg { opacity: 0.3; }
+  .project-visual .vis-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  /* Featured project — full width */
+  .project-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 56px 48px;
+  }
+  .project-card.featured .project-title { font-size: 52px; }
+  .project-card.featured .project-visual { aspect-ratio: 16/9; margin-bottom: 0; }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .skill-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+  }
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .skill-name {
+    font-size: 13px;
+    color: var(--text);
+  }
+  .skill-bar-wrap {
+    width: 100px;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+  }
+  .skill-bar {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1s ease;
+  }
+  .skill-bar.animated { transform: scaleX(1); }
+
+  /* Experience */
+  .exp-list { display: flex; flex-direction: column; gap: 2px; }
+  .exp-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+  .exp-item:hover { border-color: rgba(232,255,71,0.2); }
+  .exp-meta { display: flex; flex-direction: column; gap: 8px; }
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .exp-org {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .exp-role {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .exp-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* Formation */
+  #formation { background: var(--surface); }
+  .formation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .formation-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    transition: border-color 0.2s;
+  }
+  .formation-card:hover { border-color: rgba(232,255,71,0.3); }
+  .formation-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .formation-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .formation-place {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Contact */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .contact-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 8vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -1px;
+  }
+  .contact-big span { color: var(--accent); }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--card);
+  }
+  .contact-link:hover {
+    border-color: var(--accent);
+    background: rgba(232,255,71,0.03);
+  }
+  .contact-link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .contact-link-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+  .contact-link:hover .contact-link-arrow { transform: translate(4px, -4px); }
+
+  /* Footer */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes lineScroll {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Marquee */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    background: var(--surface);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 80px;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .marquee-item::before {
+    content: '✦';
+    color: var(--accent);
+    font-size: 12px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-number { display: none; }
+    .about-grid, .contact-inner, .formation-grid, .skills-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; }
+    .project-card.featured { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">XF</a>
+  <ul class="nav-links">
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#parcours">Parcours</a></li>
+    <li><a href="#formation">Formation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-label">Portfolio · Communication &amp; Médias</div>
+  <h1 class="hero-title">Xavier<br><span>Fini</span></h1>
+  <p class="hero-sub">
+    Communicant créatif, producteur audiovisuel &amp; coordinateur média.<br>
+    À la croisée du sport, de la vidéo et du digital.
+  </p>
+  <div class="hero-tags">
+    <span class="tag">Audiovisuel</span>
+    <span class="tag">Photographie Sport</span>
+    <span class="tag">Coordination Média</span>
+    <span class="tag">Communication Institutionnelle</span>
+    <span class="tag">Presse lycéenne</span>
+    <span class="tag">Design</span>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+  <div class="hero-number">01</div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Meylan Handball TV</span>
+    <span class="marquee-item">Photographie Sportive</span>
+    <span class="marquee-item">Presse Lycéenne</span>
+    <span class="marquee-item">Communication</span>
+    <span class="marquee-item">Radio</span>
+    <span class="marquee-item">Arbitrage</span>
+    <span class="marquee-item">Canva · Photoshop · Illustrator</span>
+    <span class="marquee-item">Meylan Handball TV</span>
+    <span class="marquee-item">Photographie Sportive</span>
+    <span class="marquee-item">Presse Lycéenne</span>
+    <span class="marquee-item">Communication</span>
+    <span class="marquee-item">Radio</span>
+    <span class="marquee-item">Arbitrage</span>
+    <span class="marquee-item">Canva · Photoshop · Illustrator</span>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">00</span>
+    <h2 class="section-title">À Propos</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Je suis <strong>Xavier Fini</strong>, communicant et producteur audiovisuel basé dans la région grenobloise. Mon univers se situe à l'intersection du sport, des médias et de la création visuelle.</p>
+      <p>Coordinateur général de <strong>Meylan Handball TV</strong>, je pilote une structure audiovisuelle bénévole qui produit des retransmissions live, des résumés et du contenu YouTube pour le club de handball de Meylan. Parallèlement, je suis responsable de l'arbitrage au club et intervenant communication auprès d'instances lycéennes.</p>
+      <p>Fort d'un parcours forgé dans les médias lycéens — JT, radio, presse papier — j'ai développé une approche créative, directe et engagée de la communication.</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-box">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Ans d'expérience médias</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Projets majeurs</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Casquettes dirigeantes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Créativité</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projets">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Projets</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Featured -->
+    <div class="project-card featured reveal">
+      <div>
+        <div class="project-cat">Audiovisuel · Sport</div>
+        <div class="project-num">01</div>
+        <div class="project-title">Meylan Handball TV</div>
+        <p class="project-desc">Création et coordination générale d'une structure audiovisuelle bénévole affiliée au Meylan Handball Club. Production de retransmissions live, de résumés de matchs et de contenus YouTube. Pilotage d'une équipe, gestion des plannings de retransmission et gouvernance institutionnelle du collectif.</p>
+        <div class="project-tags">
+          <span class="project-tag">Production vidéo</span>
+          <span class="project-tag">Live streaming</span>
+          <span class="project-tag">YouTube</span>
+          <span class="project-tag">Management</span>
+          <span class="project-tag">Gouvernance</span>
+        </div>
+      </div>
+      <div class="project-visual">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="38" stroke="#e8ff47" stroke-width="1"/>
+          <polygon points="32,24 62,40 32,56" fill="#e8ff47"/>
+        </svg>
+        <span class="vis-label">MHBTV</span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="project-card reveal">
+      <div class="project-cat">Photographie · Sport</div>
+      <div class="project-num">02</div>
+      <div class="project-visual">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <rect x="8" y="16" width="44" height="32" rx="2" stroke="#e8ff47" stroke-width="1"/>
+          <circle cx="30" cy="32" r="10" stroke="#e8ff47" stroke-width="1"/>
+          <circle cx="30" cy="32" r="4" fill="#e8ff47"/>
+          <rect x="22" y="12" width="16" height="5" rx="1" stroke="#e8ff47" stroke-width="1"/>
+        </svg>
+        <span class="vis-label">PHOTO</span>
+      </div>
+      <div class="project-title">Photographies de Matchs de Handball</div>
+      <p class="project-desc">Couverture photographique des rencontres du Meylan Handball Club. Capturer l'intensité du jeu, les émotions des joueurs et les moments décisifs de chaque match.</p>
+      <div class="project-tags">
+        <span class="project-tag">Photographie sportive</span>
+        <span class="project-tag">Post-traitement</span>
+        <span class="project-tag">Handball</span>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="project-card reveal">
+      <div class="project-cat">Communication · Institutionnel</div>
+      <div class="project-num">03</div>
+      <div class="project-visual">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <rect x="10" y="10" width="40" height="40" rx="2" stroke="#e8ff47" stroke-width="1"/>
+          <line x1="10" y1="22" x2="50" y2="22" stroke="#e8ff47" stroke-width="1"/>
+          <line x1="18" y1="34" x2="42" y2="34" stroke="#e8ff47" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <line x1="18" y1="40" x2="36" y2="40" stroke="#e8ff47" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <circle cx="16" cy="16" r="2" fill="#e8ff47"/>
+          <circle cx="23" cy="16" r="2" fill="#e8ff47" opacity="0.4"/>
+          <circle cx="30" cy="16" r="2" fill="#e8ff47" opacity="0.2"/>
+        </svg>
+        <span class="vis-label">CVL</span>
+      </div>
+      <div class="project-title">Intervenant CVL — Lycée Pablo Neruda</div>
+      <p class="project-desc">Accompagnement du Conseil de la Vie Lycéenne du lycée Pablo Neruda sur leurs projets de communication. Conseil en stratégie, création visuelle et prise de parole institutionnelle.</p>
+      <div class="project-tags">
+        <span class="project-tag">Communication</span>
+        <span class="project-tag">Conseil</span>
+        <span class="project-tag">Institutionnel</span>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="project-card reveal">
+      <div class="project-cat">Presse · Direction éditoriale</div>
+      <div class="project-num">04</div>
+      <div class="project-visual">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <rect x="12" y="8" width="36" height="44" rx="2" stroke="#e8ff47" stroke-width="1"/>
+          <line x1="18" y1="18" x2="42" y2="18" stroke="#e8ff47" stroke-width="1.5"/>
+          <line x1="18" y1="26" x2="42" y2="26" stroke="#e8ff47" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <line x1="18" y1="32" x2="42" y2="32" stroke="#e8ff47" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <line x1="18" y1="38" x2="34" y2="38" stroke="#e8ff47" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <rect x="18" y="42" width="8" height="4" rx="1" fill="#e8ff47" opacity="0.5"/>
+        </svg>
+        <span class="vis-label">PRESSE</span>
+      </div>
+      <div class="project-title">Directeur du JT &amp; Journal Lycéen</div>
+      <p class="project-desc">Direction du journal télévisé et du journal papier du lycée. Gestion éditoriale, coordination des équipes de rédacteurs et journalistes, mise en page et diffusion.</p>
+      <div class="project-tags">
+        <span class="project-tag">Direction éditoriale</span>
+        <span class="project-tag">JT</span>
+        <span class="project-tag">Presse papier</span>
+        <span class="project-tag">Management</span>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card reveal">
+      <div class="project-cat">Radio · Médias sonores</div>
+      <div class="project-num">05</div>
+      <div class="project-visual">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <circle cx="30" cy="30" r="14" stroke="#e8ff47" stroke-width="1"/>
+          <circle cx="30" cy="30" r="6" fill="#e8ff47" opacity="0.3" stroke="#e8ff47" stroke-width="1"/>
+          <path d="M14 30 Q8 20 14 10" stroke="#e8ff47" stroke-width="1" fill="none"/>
+          <path d="M46 30 Q52 20 46 10" stroke="#e8ff47" stroke-width="1" fill="none"/>
+          <path d="M10 34 Q2 20 10 6" stroke="#e8ff47" stroke-width="0.5" fill="none" opacity="0.5"/>
+          <path d="M50 34 Q58 20 50 6" stroke="#e8ff47" stroke-width="0.5" fill="none" opacity="0.5"/>
+        </svg>
+        <span class="vis-label">RADIO</span>
+      </div>
+      <div class="project-title">Directeur Adjoint — Radio du Lycée</div>
+      <p class="project-desc">Direction adjointe de la radio lycéenne. Animation, programmation des émissions, gestion technique et coordination des équipes de production sonore.</p>
+      <div class="project-tags">
+        <span class="project-tag">Radio</span>
+        <span class="project-tag">Animation</span>
+        <span class="project-tag">Production sonore</span>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="project-card reveal">
+      <div class="project-cat">Engagement · Représentation</div>
+      <div class="project-num">06</div>
+      <div class="project-visual">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <polygon points="30,8 38,24 56,26 43,39 46,56 30,48 14,56 17,39 4,26 22,24" stroke="#e8ff47" stroke-width="1" fill="none"/>
+          <polygon points="30,18 34,26 44,28 37,35 39,44 30,40 21,44 23,35 16,28 26,26" fill="#e8ff47" opacity="0.15"/>
+        </svg>
+        <span class="vis-label">CVL</span>
+      </div>
+      <div class="project-title">Élu au Conseil de la Vie Lycéenne</div>
+      <p class="project-desc">Élu représentant au CVL, participant aux décisions institutionnelles de l'établissement et porte-parole des élèves auprès de l'administration.</p>
+      <div class="project-tags">
+        <span class="project-tag">Représentation</span>
+        <span class="project-tag">Engagement</span>
+        <span class="project-tag">Leadership</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="competences">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Compétences</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Création & Design</div>
+      <div class="skill-item">
+        <span class="skill-name">Adobe Photoshop</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Adobe Illustrator</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Canva</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.95"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Identité visuelle</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.75"></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Audiovisuel & Médias</div>
+      <div class="skill-item">
+        <span class="skill-name">Production vidéo</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Live streaming</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Photographie sportive</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Radio / Podcast</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.7"></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Communication & Gestion</div>
+      <div class="skill-item">
+        <span class="skill-name">Réseaux sociaux</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.9"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Direction éditoriale</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Management d'équipe</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.75"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Google Workspace</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.85"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Parcours -->
+<section id="parcours" style="background: var(--surface);">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Parcours</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-list">
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">En cours</span>
+        <span class="exp-org">Meylan Handball Club</span>
+      </div>
+      <div>
+        <div class="exp-role">Coordinateur Général — Meylan Handball TV</div>
+        <p class="exp-desc">Pilotage de la structure audiovisuelle bénévole du club. Coordination des retransmissions live, production de contenus YouTube, gestion d'équipe et gouvernance institutionnelle du collectif MHBTV.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">En cours</span>
+        <span class="exp-org">Meylan Handball Club</span>
+      </div>
+      <div>
+        <div class="exp-role">Responsable de l'Arbitrage</div>
+        <p class="exp-desc">Gestion centralisée du suivi pédagogique numérique des Juges-Arbitres Jeunes du club via des outils Google. Formation, encadrement et coordination des arbitres en développement.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">2024 – 2025</span>
+        <span class="exp-org">Lycée Pablo Neruda</span>
+      </div>
+      <div>
+        <div class="exp-role">Intervenant Communication — CVL</div>
+        <p class="exp-desc">Accompagnement du Conseil de la Vie Lycéenne dans leurs projets de communication. Conseils en stratégie de communication, création de supports visuels et développement de la visibilité de l'instance.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">Lycée</span>
+        <span class="exp-org">Établissement lycéen</span>
+      </div>
+      <div>
+        <div class="exp-role">Directeur du JT &amp; Journal Papier</div>
+        <p class="exp-desc">Direction éditoriale complète du journal télévisé et du journal papier du lycée. Coordination de l'équipe rédactionnelle, suivi de la production et diffusion des contenus.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">Lycée</span>
+        <span class="exp-org">Établissement lycéen</span>
+      </div>
+      <div>
+        <div class="exp-role">Directeur Adjoint — Radio du Lycée</div>
+        <p class="exp-desc">Co-pilotage de la radio lycéenne. Programmation des émissions, gestion technique, animation et formation des équipes de production sonore.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">Lycée</span>
+        <span class="exp-org">Lycée</span>
+      </div>
+      <div>
+        <div class="exp-role">Élu — Conseil de la Vie Lycéenne</div>
+        <p class="exp-desc">Représentant élu des élèves au CVL. Participation aux décisions institutionnelles, médiation entre élèves et administration, portage de projets collectifs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Formation -->
+<section id="formation">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Formation</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="formation-grid">
+    <div class="formation-card reveal">
+      <div class="formation-year">En cours</div>
+      <div class="formation-title">Licence en Communication</div>
+      <div class="formation-place">Région grenobloise</div>
+    </div>
+    <div class="formation-card reveal">
+      <div class="formation-year">Compétences autodidactes</div>
+      <div class="formation-title">Design & Audiovisuel</div>
+      <div class="formation-place">Adobe CC · Canva · Production vidéo</div>
+    </div>
+    <div class="formation-card reveal">
+      <div class="formation-year">Pratique terrain</div>
+      <div class="formation-title">Médias Lycéens</div>
+      <div class="formation-place">JT · Radio · Presse papier</div>
+    </div>
+    <div class="formation-card reveal">
+      <div class="formation-year">Bénévolat actif</div>
+      <div class="formation-title">Sport & Arbitrage</div>
+      <div class="formation-place">Meylan Handball Club — FFHB</div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" style="background: var(--surface);">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Contact</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-inner">
+    <div class="contact-big reveal">
+      Travail<span>.</span><br>
+      lons<br>
+      ensem<span>ble.</span>
+    </div>
+    <div class="contact-links reveal">
+      <a href="https://www.linkedin.com/in/xavier-fini/" target="_blank" class="contact-link">
+        <div>
+          <div class="contact-link-label">LinkedIn</div>
+          <div>xavier-fini</div>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="mailto:xavier.fini@example.com" class="contact-link">
+        <div>
+          <div class="contact-link-label">Email</div>
+          <div>xavier.fini@···</div>
+        </div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="#" class="contact-link">
+        <div>
+          <div class="contact-link-label">Localisation</div>
+          <div>Grenoble, France</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span>Xavier Fini · Portfolio 2025</span>
+  <span>Grenoble, France</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .project-card, .stat-box, .skill-group, .exp-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); ring.classList.add('hovered'); });
+    el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); ring.classList.remove('hovered'); });
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Skill bars
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-bar').forEach(bar => {
+          bar.style.transform = `scaleX(${bar.dataset.width})`;
+          bar.classList.add('animated');
+        });
+        barObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skill-group').forEach(g => barObs.observe(g));
+</script>
+</body>
+</html>
