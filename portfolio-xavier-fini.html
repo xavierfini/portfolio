@@ -219,6 +219,22 @@
     opacity: 0;
     animation: fadeIn 1.2s 0.8s forwards;
   }
+  /* Hero slideshow */
+  .hero-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+  }
+  .hero-slide.active { opacity: 0.09; }
 
   /* Section base */
   section {
@@ -673,6 +689,12 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
+  <!-- Slideshow -->
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="hero-slide active" style="background-image: url('ta-photo-1.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('ta-photo-2.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('Screenshot_20250403_133642_Instagram.jpg')"></div>
+  </div>
   <div class="hero-label">Portfolio · Communication &amp; Médias</div>
   <h1 class="hero-title">Xavier<br><span>Fini</span></h1>
   <p class="hero-sub">
@@ -1148,6 +1170,15 @@
     });
   }, { threshold: 0.3 });
   document.querySelectorAll('.skill-group').forEach(g => barObs.observe(g));
+
+  // Hero slideshow
+const slides = document.querySelectorAll('.hero-slide');
+let current = 0;
+setInterval(() => {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+}, 4000);
 </script>
 </body>
 </html>
