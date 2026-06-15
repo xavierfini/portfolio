@@ -307,13 +307,67 @@
     margin-top: 8px;
   }
 
-  /* Projects */
+  /* =====================
+     PROJETS & RÉALISATIONS
+     ===================== */
   #projets { background: var(--surface); }
+
+  /* Sous-titre de bloc */
+  .projects-block-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .projects-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .projects-block-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Séparateur entre les deux blocs */
+  .projects-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 72px 0;
+    position: relative;
+  }
+  .projects-separator::after {
+    content: 'RÉALISATIONS';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface);
+    padding: 0 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+  }
+
+  /* Grille grands projets */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 2px;
   }
+
+  /* Grille réalisations — plus compacte */
+  .realisations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  /* Card projet standard */
   .project-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -333,6 +387,7 @@
   }
   .project-card:hover::before { opacity: 1; }
   .project-card:hover { border-color: rgba(232,255,71,0.3); }
+
   .project-cat {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -380,7 +435,7 @@
     padding: 5px 12px;
     color: var(--muted);
   }
-  . {
+  .project-visual {
     width: 100%;
     aspect-ratio: 16/9;
     background: var(--bg);
@@ -392,7 +447,7 @@
     align-items: center;
     justify-content: center;
   }
-  . svg { opacity: 0.3; }
+  .project-visual svg { opacity: 0.3; }
   .project-visual .vis-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 11px;
@@ -404,7 +459,7 @@
     right: 12px;
   }
 
-  /* Featured project — full width */
+  /* Featured project — full width, 2 colonnes internes */
   .project-card.featured {
     grid-column: 1 / -1;
     display: grid;
@@ -415,6 +470,92 @@
   }
   .project-card.featured .project-title { font-size: 52px; }
   .project-card.featured .project-visual { aspect-ratio: 16/9; margin-bottom: 0; }
+
+  /* Card réalisation — compacte, sans visuel */
+  .realisation-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+    cursor: none;
+  }
+  .realisation-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,255,71,0.03) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .realisation-card:hover::before { opacity: 1; }
+  .realisation-card:hover { border-color: rgba(232,255,71,0.25); }
+
+  .realisation-card .project-num {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .realisation-card:hover .project-num { color: rgba(232,255,71,0.12); }
+
+  .realisation-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .realisation-icon svg { opacity: 0.6; }
+
+  .realisation-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .realisation-desc {
+    font-size: 12px;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Thumbnails placeholder dans les réalisations */
+  .realisation-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 20px;
+  }
+  .realisation-thumb {
+    aspect-ratio: 4/3;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .realisation-thumb:hover { border-color: rgba(232,255,71,0.2); }
+  .realisation-thumb span {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--border);
+    text-transform: uppercase;
+  }
 
   /* Skills */
   .skills-grid {
@@ -664,6 +805,7 @@
     .exp-item { grid-template-columns: 1fr; }
     .project-card.featured { grid-template-columns: 1fr; }
     .projects-grid { grid-template-columns: 1fr; }
+    .realisations-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -774,16 +916,23 @@
   </div>
 </section>
 
-<!-- Projects -->
+<!-- ===================== PROJETS & RÉALISATIONS ===================== -->
 <section id="projets">
   <div class="section-header reveal">
     <span class="section-num">01</span>
     <h2 class="section-title">Projets</h2>
     <div class="section-line"></div>
   </div>
+
+  <!-- ── GRANDS PROJETS ── -->
+  <div class="projects-block-header reveal">
+    <span class="projects-block-label">Grands projets</span>
+    <div class="projects-block-line"></div>
+  </div>
+
   <div class="projects-grid">
 
-    <!-- Featured -->
+    <!-- Projet 01 — Featured MHBTV -->
     <div class="project-card featured reveal">
       <div>
         <div class="project-cat">Audiovisuel · Sport</div>
@@ -806,54 +955,16 @@
       </div>
     </div>
 
-    <!-- Featured2 -->
-    <div class="project-card featured reveal">
-      <div>
-        <div class="project-cat">Photographie · Sport</div>
-        <div class="project-num">02</div>
-        <div class="project-title">Photographies de Matchs de Handball</div>
-        <p class="project-desc">Couverture photographique des rencontres du club de Meylan Handball. Capturer l'intensité du jeu, les émotions des joueurs et les moments décisifs de chaque match.</p>
-        <div class="project-tags">
-          <span class="project-tag">Photographie sportive</span>
-          <span class="project-tag">Post-traitement</span>
-          <span class="project-tag">Handball</span>
-        </div>
-      </div>
-      <div class="project-visual">
-        <img src="#"/>
-        <span class="vis-label">PHOTO</span>
-      </div>
-    </div>
-
-    <!-- Featured3 -->
-    <div class="project-card featured reveal">
-      <div>
-        <div class="project-cat">Communication · Institutionnel</div>
-        <div class="project-num">03</div>
-        <div class="project-title">Intervenant CVL — Lycée Pablo Neruda</div>
-        <p class="project-desc">Accompagnement du Conseil de la Vie Lycéenne du lycée Pablo Neruda sur leurs projets de communication. Conseil en stratégie, création visuelle et prise de parole institutionnelle.</p>
-        <div class="project-tags">
-          <span class="project-tag">Communication</span>
-          <span class="project-tag">Conseil</span>
-          <span class="project-tag">Institutionnel</span>
-        </div>
-      </div>
-      <div class="project-visual">
-        <img src="Screenshot_20250403_133642_Instagram.jpg" width="75%"/>
-        <span class="vis-label">CVL</span>
-      </div>
-    </div>
-
-    <!-- Featured4 -->
+    <!-- Projet 02 — JT & Journal Lycéen -->
     <div class="project-card featured reveal">
       <div>
         <div class="project-cat">Presse · Direction éditoriale</div>
-        <div class="project-num">04</div>
+        <div class="project-num">02</div>
         <div class="project-title">Directeur du JT &amp; Journal Lycéen</div>
-        <p class="project-desc">Direction du journal télévisé et du journal papier du lycée. Gestion éditoriale, coordination des équipes de rédacteurs et journalistes, mise en page et diffusion.</p>
+        <p class="project-desc">Direction du journal télévisé et du journal papier du lycée Pablo Neruda. Gestion éditoriale complète, coordination des équipes de rédacteurs et journalistes, mise en page et diffusion des contenus auprès de toute la communauté scolaire.</p>
         <div class="project-tags">
           <span class="project-tag">Direction éditoriale</span>
-          <span class="project-tag">Journal Télévisé</span>
+          <span class="project-tag">Journal télévisé</span>
           <span class="project-tag">Presse papier</span>
           <span class="project-tag">Management</span>
         </div>
@@ -863,58 +974,103 @@
           <source src="le-jt-07-05-24-cabaret-frapp (2).mp4" type="video/mp4">
         </video>
         <span class="vis-label">PRESSE</span>
-     </div>
-    </div>
-
-    <!-- Featured5 -->
-    <div class="project-card featured reveal">
-      <div>
-        <div class="project-cat">Radio · Médias sonores</div>
-        <div class="project-num">05</div>
-        <div class="project-title">Coordinateur Adjoint — Radio du Lycée</div>
-        <p class="project-desc">Direction adjointe de la radio lycéenne. Animation, programmation des émissions, gestion technique et coordination des équipes de production sonore.</p>
-        <div class="project-tags">
-          <span class="project-tag">Radio</span>
-          <span class="project-tag">Animation</span>
-          <span class="project-tag">Production sonore</span>
-        </div>
-      </div>
-      <div class="project-visual">
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-          <circle cx="30" cy="30" r="14" stroke="#e8ff47" stroke-width="1"/>
-          <circle cx="30" cy="30" r="6" fill="#e8ff47" opacity="0.3" stroke="#e8ff47" stroke-width="1"/>
-          <path d="M14 30 Q8 20 14 10" stroke="#e8ff47" stroke-width="1" fill="none"/>
-          <path d="M46 30 Q52 20 46 10" stroke="#e8ff47" stroke-width="1" fill="none"/>
-          <path d="M10 34 Q2 20 10 6" stroke="#e8ff47" stroke-width="0.5" fill="none" opacity="0.5"/>
-          <path d="M50 34 Q58 20 50 6" stroke="#e8ff47" stroke-width="0.5" fill="none" opacity="0.5"/>
-        </svg>
-        <span class="vis-label">RADIO</span>
       </div>
     </div>
 
-    <!-- Featured6 -->
-    <div class="project-card featured reveal">
-      <div>
-        <div class="project-cat">Engagement · Représentation</div>
-        <div class="project-num">06</div>
-        <div class="project-title">Élu au Conseil de la Vie Lycéenne</div>
-        <p class="project-desc">Élu représentant au CVL, participant aux décisions institutionnelles de l'établissement et porte-parole des élèves auprès de l'administration.</p>
-        <div class="project-tags">
-          <span class="project-tag">Représentation</span>
-          <span class="project-tag">Engagement</span>
-          <span class="project-tag">Leadership</span>
-        </div>
-      </div>
-      <div class="project-visual">
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-          <polygon points="30,8 38,24 56,26 43,39 46,56 30,48 14,56 17,39 4,26 22,24" stroke="#e8ff47" stroke-width="1" fill="none"/>
-          <polygon points="30,18 34,26 44,28 37,35 39,44 30,40 21,44 23,35 16,28 26,26" fill="#e8ff47" opacity="0.15"/>
-        </svg>
-        <span class="vis-label">CVL</span>
-      </div>
-    </div>
+  </div><!-- /projects-grid -->
 
+  <!-- ── SÉPARATEUR ── -->
+  <div class="projects-separator reveal"></div>
+
+  <!-- ── RÉALISATIONS ── -->
+  <div class="projects-block-header reveal">
+    <span class="projects-block-label">Réalisations</span>
+    <div class="projects-block-line"></div>
   </div>
+
+  <div class="realisations-grid">
+
+    <!-- Réalisation 01 — Affiches New's FM -->
+    <div class="realisation-card reveal">
+      <div class="project-cat">Design · Stage</div>
+      <div class="project-num">01</div>
+      <div class="realisation-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="3" y="2" width="14" height="16" rx="1" stroke="#e8ff47" stroke-width="1.2"/>
+          <line x1="6" y1="6" x2="14" y2="6" stroke="#e8ff47" stroke-width="1"/>
+          <rect x="6" y="9" width="8" height="5" rx="0.5" stroke="#e8ff47" stroke-width="0.8" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="realisation-title">Affiches &amp; Visuels — New's FM</div>
+      <p class="realisation-desc">Production de supports de communication visuelle lors du stage à New's FM. Création d'affiches promotionnelles pour les émissions et événements de la radio.</p>
+      <div class="project-tags">
+        <span class="project-tag">Design graphique</span>
+        <span class="project-tag">Affiche</span>
+        <span class="project-tag">Radio</span>
+        <span class="project-tag">Stage</span>
+      </div>
+      <!-- Placeholder visuels -->
+      <div class="realisation-thumbnails">
+        <div class="realisation-thumb"><img src="1_20260616_001854_0000.jpg"/></div>
+        <div class="realisation-thumb"><img src="1_20260616_002010_0000.jpg"/></div>
+        <div class="realisation-thumb"><img src="Screenshot_20260616_001214_Instagram.jpg"/></div>
+      </div>
+    </div>
+
+    <!-- Réalisation 02 — Photos Handball -->
+    <div class="realisation-card reveal">
+      <div class="project-cat">Photographie · Sport</div>
+      <div class="project-num">02</div>
+      <div class="realisation-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="5" width="16" height="12" rx="1.5" stroke="#e8ff47" stroke-width="1.2"/>
+          <circle cx="10" cy="11" r="3" stroke="#e8ff47" stroke-width="1"/>
+          <path d="M7 5 L8.5 2.5 L11.5 2.5 L13 5" stroke="#e8ff47" stroke-width="1" fill="none"/>
+          <circle cx="10" cy="11" r="1" fill="#e8ff47" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="realisation-title">Photographies de Matchs de Handball</div>
+      <p class="realisation-desc">Couverture photographique des rencontres du club de Meylan Handball. Capturer l'intensité du jeu, les émotions des joueurs et les moments décisifs de chaque match.</p>
+      <div class="project-tags">
+        <span class="project-tag">Photographie sportive</span>
+        <span class="project-tag">Post-traitement</span>
+        <span class="project-tag">Handball</span>
+      </div>
+      <div class="realisation-thumbnails">
+        <div class="realisation-thumb"><span>À venir</span></div>
+        <div class="realisation-thumb"><span>À venir</span></div>
+        <div class="realisation-thumb"><span>À venir</span></div>
+      </div>
+    </div>
+
+    <!-- Réalisation 03 — CVL Intervenant -->
+    <div class="realisation-card reveal">
+      <div class="project-cat">Communication · Institutionnel</div>
+      <div class="project-num">03</div>
+      <div class="realisation-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="7" r="3" stroke="#e8ff47" stroke-width="1.2"/>
+          <path d="M4 17 C4 13.5 6.7 11 10 11 C13.3 11 16 13.5 16 17" stroke="#e8ff47" stroke-width="1.2" fill="none"/>
+          <circle cx="15" cy="6" r="2" stroke="#e8ff47" stroke-width="0.8" opacity="0.5"/>
+          <path d="M17 13 C17 11.3 16 10 15 10" stroke="#e8ff47" stroke-width="0.8" fill="none" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="realisation-title">Intervenant CVL — Lycée Pablo Neruda</div>
+      <p class="realisation-desc">Accompagnement du Conseil de la Vie Lycéenne sur leurs projets de communication. Conseil en stratégie, création de supports visuels et prise de parole institutionnelle.</p>
+      <div class="project-tags">
+        <span class="project-tag">Communication</span>
+        <span class="project-tag">Conseil</span>
+        <span class="project-tag">Institutionnel</span>
+      </div>
+      <div class="realisation-thumbnails">
+        <div class="realisation-thumb"><img src="Vente_20260616_002107_0000.jpg"/></div>
+        <div class="realisation-thumb"><span>À venir</span></div>
+        <div class="realisation-thumb"><span>À venir</span></div>
+      </div>
+    </div>
+
+  </div><!-- /realisations-grid -->
+
 </section>
 
 <!-- Skills -->
@@ -928,7 +1084,7 @@
     <div class="skill-group reveal">
       <div class="skill-group-title">Création & Design</div>
       <div class="skill-item">
-        <span class="skill-name">Adobe Photoshop</span>
+        <span class="skill-name">Adobe Indesign</span>
         <div class="skill-bar-wrap"><div class="skill-bar" data-width="0.85"></div></div>
       </div>
       <div class="skill-item">
@@ -1011,7 +1167,17 @@
     </div>
     <div class="exp-item reveal">
       <div class="exp-meta">
-        <span class="exp-date">En cours</span>
+        <span class="exp-date">Avril à mai 2026</span>
+        <span class="exp-org">Radio New's FM</span>
+      </div>
+      <div>
+        <div class="exp-role">Chargé de communication et animateur radio</div>
+        <p class="exp-desc">Créations de visuels pour le site internet et réseaux sociaux. Animation de chroniques radio à l'natenne en direct.</p>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <span class="exp-date">Octobre 2025 à mai 2026</span>
         <span class="exp-org">Lycée Pablo Neruda</span>
       </div>
       <div>
@@ -1021,32 +1187,12 @@
     </div>
     <div class="exp-item reveal">
       <div class="exp-meta">
-        <span class="exp-date">Lycée</span>
+        <span class="exp-date">Octobre 2022 à octobre 2024</span>
         <span class="exp-org">Lycée Pablo Neruda</span>
       </div>
       <div>
         <div class="exp-role">Directeur du JT &amp; Journal Papier</div>
         <p class="exp-desc">Direction éditoriale complète du journal télévisé et du journal papier du lycée. Coordination de l'équipe rédactionnelle, suivi de la production et diffusion des contenus.</p>
-      </div>
-    </div>
-    <div class="exp-item reveal">
-      <div class="exp-meta">
-        <span class="exp-date">Lycée</span>
-        <span class="exp-org">Lycée Pablo Neruda</span>
-      </div>
-      <div>
-        <div class="exp-role">Coordinateur Adjoint — Radio du Lycée</div>
-        <p class="exp-desc">Co-pilotage de la radio lycéenne. Programmation des émissions, gestion technique, animation et formation des équipes de production sonore.</p>
-      </div>
-    </div>
-    <div class="exp-item reveal">
-      <div class="exp-meta">
-        <span class="exp-date">Lycée</span>
-        <span class="exp-org">Lycée Pablo Neruda</span>
-      </div>
-      <div>
-        <div class="exp-role">Élu — Conseil de la Vie Lycéenne</div>
-        <p class="exp-desc">Représentant élu des élèves au CVL. Participation aux décisions institutionnelles, médiation entre élèves et administration, portage de projets collectifs.</p>
       </div>
     </div>
   </div>
@@ -1144,7 +1290,7 @@
   }
   animRing();
 
-  document.querySelectorAll('a, button, .project-card, .stat-box, .skill-group, .exp-item').forEach(el => {
+  document.querySelectorAll('a, button, .project-card, .realisation-card, .stat-box, .skill-group, .exp-item').forEach(el => {
     el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); ring.classList.add('hovered'); });
     el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); ring.classList.remove('hovered'); });
   });
@@ -1176,13 +1322,13 @@
   document.querySelectorAll('.skill-group').forEach(g => barObs.observe(g));
 
   // Hero slideshow
-const slides = document.querySelectorAll('.hero-slide');
-let current = 0;
-setInterval(() => {
-  slides[current].classList.remove('active');
-  current = (current + 1) % slides.length;
-  slides[current].classList.add('active');
-}, 4000);
+  const slides = document.querySelectorAll('.hero-slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
 </script>
 </body>
 </html>
